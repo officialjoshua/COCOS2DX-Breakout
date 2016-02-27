@@ -90,7 +90,7 @@ bool GameScene::init()
     edgeSp->setPhysicsBody( boundBody ); //
     
     /* This is the important command, if not available, there is nothing happening when colliding */
-    boundBody->setContactTestBitmask(0x000002);
+    boundBody->setContactTestBitmask( 0x000002 );
     
     this->addChild( edgeSp );
     
@@ -150,49 +150,47 @@ bool GameScene::init()
      */
     
     for (int i = 0; i < 7; i++) {
-        static int padding = 20;
+        static int space = 20;
         
-        auto block = Sprite::create("Poptart.png");
-        auto blockBody = PhysicsBody::createBox(block->getContentSize(), PHYSICSBODY_MATERIAL_DEFAULT);
+        auto block = Sprite::create( "Poptart.png" );
+        auto blockBody = PhysicsBody::createBox( block->getContentSize(), PHYSICSBODY_MATERIAL_DEFAULT );
         
-        blockBody->getShape(0)->setDensity(10.0f);
-        blockBody->getShape(0)->setFriction(1.0f);
-        blockBody->getShape(0)->setRestitution(1.f);
-        blockBody->setDynamic(false);
+        blockBody->getShape( 0 )->setDensity( 10.0f );
+        blockBody->getShape( 0 )->setFriction( 1.0f );
+        blockBody->getShape( 0 )->setRestitution( 1.f );
+        blockBody->setDynamic( false );
         
-        // Create the distance even among the bricks
-        int xOffset = padding + block->getContentSize().width / 2 +
-                ((block->getContentSize().width + padding)*i);
+        int distance = space + block->getContentSize().width / 2 +
+                ( ( block->getContentSize().width + space ) * i );
         
-        block->setPosition(xOffset, 660);
-        blockBody->setContactTestBitmask(0x000001);
-        block->setPhysicsBody(blockBody);
-        block->setTag(3);
+        block->setPosition( distance, 660 );
+        blockBody->setContactTestBitmask( 0x000001 );
+        block->setPhysicsBody( blockBody );
+        block->setTag( 3 );
         
-        this->addChild(block);
+        this->addChild( block );
     }
     
     for (int i = 0; i < 7; i++) {
-        static int padding = 20;
+        static int space = 20;
         
-        auto block = Sprite::create("Poptart.png");
-        auto blockBody = PhysicsBody::createBox(block->getContentSize(), PHYSICSBODY_MATERIAL_DEFAULT);
+        auto block = Sprite::create( "Poptart.png" );
+        auto blockBody = PhysicsBody::createBox( block->getContentSize(), PHYSICSBODY_MATERIAL_DEFAULT );
         
-        blockBody->getShape(0)->setDensity(10.0f);
-        blockBody->getShape(0)->setFriction(0.0f);
-        blockBody->getShape(0)->setRestitution(1.f);
-        blockBody->setDynamic(false);
+        blockBody->getShape( 0 )->setDensity( 10.0f );
+        blockBody->getShape( 0 )->setFriction( 1.0f );
+        blockBody->getShape( 0 )->setRestitution( 1.f );
+        blockBody->setDynamic( false );
         
-        // Create the distance even among the bricks
-        int xOffset = padding + block->getContentSize().width / 2 +
-        ((block->getContentSize().width + padding)*i);
+        int distance = space + block->getContentSize().width / 2 +
+        ( ( block->getContentSize().width + space ) * i );
         
-        block->setPosition(xOffset, 570);
-        blockBody->setContactTestBitmask(0x000001);
-        block->setPhysicsBody(blockBody);
-        block->setTag(3);
+        block->setPosition( distance, 570 );
+        blockBody->setContactTestBitmask( 0x000001 );
+        block->setPhysicsBody( blockBody );
+        block->setTag( 3 );
         
-        this->addChild(block);
+        this->addChild( block );
     }
     
     /*
@@ -201,8 +199,8 @@ bool GameScene::init()
     auto dispatcher = Director::getInstance()->getEventDispatcher();
     auto contactListener = EventListenerPhysicsContact::create();
     
-    contactListener->onContactBegin = CC_CALLBACK_1(GameScene::onContactBegin, this);
-    dispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
+    contactListener->onContactBegin = CC_CALLBACK_1( GameScene::onContactBegin, this );
+    dispatcher->addEventListenerWithSceneGraphPriority( contactListener, this );
     
     this->addListeners();
     
@@ -214,38 +212,38 @@ bool GameScene::init()
 bool GameScene::onContactBegin(PhysicsContact& contact)
 {
     // Get two collided object
-    auto spriteA = (Sprite*)contact.getShapeA()->getBody()->getNode();
-    auto spriteB = (Sprite*)contact.getShapeB()->getBody()->getNode();
+    auto spriteA = ( Sprite* )contact.getShapeA()->getBody()->getNode();
+    auto spriteB = ( Sprite* )contact.getShapeB()->getBody()->getNode();
     
     // Check kinds of objects
     int tagA = spriteA->getTag();
     int tagB = spriteB->getTag();
     
-    if (tagA == 3)
+    if ( tagA == 3 )
     {
         CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect( "score.m4a" );
-        this->removeChild(spriteA,true);
+        this->removeChild( spriteA, true );
         score = score + 10;
         
-        std::string scoreStr = "Score: " + std::to_string(score);
-        label->setString(scoreStr);
+        std::string scoreStr = "Score: " + std::to_string( score );
+        label->setString( scoreStr );
     }
     else
         CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect( "bump.m4a" );
     
-    if (tagB == 3)
+    if ( tagB == 3 )
     {
         CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect( "score.m4a" );
-        this->removeChild(spriteB,true);
+        this->removeChild( spriteB, true );
         score = score + 10;
         
-        std::string scoreStr = "Score: " + std::to_string(score);
-        label->setString(scoreStr);
+        std::string scoreStr = "Score: " + std::to_string( score );
+        label->setString( scoreStr );
     }
     else
         CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect( "bump.m4a" );
     
-    if ( (tagA == 0 || tagB  == 0 ) & ( ball->getPositionY() <= paddle->getPositionY()))
+    if ( ( tagA == 0 || tagB  == 0 ) & ( ball->getPositionY() <= paddle->getPositionY() ) )
     {
         CCLOG( "Lose" );
         GoToGameOverScene( this );
@@ -259,7 +257,7 @@ void GameScene::addListeners()
     // implement key listeners here like WASD key movements.
     auto eventListener = EventListenerKeyboard::create();
     
-    eventListener->onKeyPressed = [&](EventKeyboard::KeyCode keyCode, Event* event)
+    eventListener->onKeyPressed = [&]( EventKeyboard::KeyCode keyCode, Event* event )
     {
         Vec2 loc = event->getCurrentTarget()->getPosition();
         
@@ -320,15 +318,15 @@ void GameScene::update( float dt )
     
     Vector<PhysicsBody*> bodies = m_world->getAllBodies();
     
-    for (PhysicsBody* body : bodies)
+    for ( PhysicsBody* body : bodies )
     {
-        if (body->getNode()->getTag() == 3)
+        if ( body->getNode()->getTag() == 3 )
         {
             isWin = false;
         }
     }
     
-    if (isWin == true)
+    if ( isWin == true )
     {
         CCLOG( "WIN" );
         GoToWinScene( this );
