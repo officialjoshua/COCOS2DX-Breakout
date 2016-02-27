@@ -16,18 +16,18 @@ Scene* GameScene::createScene()
     // auto scene = Scene::create();
     // change to:
     auto scene = Scene::createWithPhysics();
-    scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_NONE);
+    scene->getPhysicsWorld()->setDebugDrawMask( PhysicsWorld::DEBUGDRAW_NONE );
     
     // set gravity
-    Vect gravity(0.0f, 0.0f);
-    scene->getPhysicsWorld()->setGravity(gravity);
+    Vect gravity( 0.0f, 0.0f );
+    scene->getPhysicsWorld()->setGravity( gravity );
     
     // 'layer' is an autorelease object
     auto layer = GameScene::create();
-    layer->setPhyWorld(scene->getPhysicsWorld());
+    layer->setPhyWorld( scene->getPhysicsWorld() );
 
     // add layer as a child to scene
-    scene->addChild(layer);
+    scene->addChild( layer );
     
     // return the scene
     return scene;
@@ -83,14 +83,14 @@ bool GameScene::init()
     
     boundBody->getShape( 0 )->setRestitution( 1.0f );
     boundBody->getShape( 0 )->setFriction( 0.0f );
-    boundBody->getShape( 0 )->setDensity( 1.0f );
+    boundBody->getShape( 0 )->setDensity( 15.0f );
     
     /* Set the position and the centre of Box in the center of the screen & Set physics Body */
     edgeSp->setPosition( Point( visibleSize.width / 2, visibleSize.height / 2 ) );
     edgeSp->setPhysicsBody( boundBody ); //
     
     /* This is the important command, if not available, there is nothing happening when colliding */
-    boundBody->setContactTestBitmask(0x000001);
+    boundBody->setContactTestBitmask(0x000002);
     
     this->addChild( edgeSp );
     
@@ -109,7 +109,7 @@ bool GameScene::init()
     
     ballBody->getShape( 0 )->setRestitution( 1.0f );
     ballBody->getShape( 0 )->setFriction( 0.0f );
-    ballBody->getShape( 0 )->setDensity( 1.0f );
+    ballBody->getShape( 0 )->setDensity( 0.8f );
     /* Not set acceleration */
     ballBody->setGravityEnable( false );
     
@@ -125,12 +125,14 @@ bool GameScene::init()
     
     /*
      *  Create Paddle Sprite
-     */    paddle = Sprite::create( "Clouds.png" );
+     */
+    
+    paddle = Sprite::create( "Clouds.png" );
     auto paddleBody = PhysicsBody::createBox( paddle->getContentSize(), PHYSICSBODY_MATERIAL_DEFAULT );
     
     paddleBody->getShape( 0 )->setRestitution( 1.0f );
     paddleBody->getShape( 0 )->setFriction( 0.0f );
-    paddleBody->getShape( 0 )->setDensity( 10.0f );
+    paddleBody->getShape( 0 )->setDensity( 10.f );
     paddleBody->setGravityEnable( false );
 
     /* Set static when reacting, no restitution, no changing position */
@@ -154,7 +156,7 @@ bool GameScene::init()
         auto blockBody = PhysicsBody::createBox(block->getContentSize(), PHYSICSBODY_MATERIAL_DEFAULT);
         
         blockBody->getShape(0)->setDensity(10.0f);
-        blockBody->getShape(0)->setFriction(0.0f);
+        blockBody->getShape(0)->setFriction(1.0f);
         blockBody->getShape(0)->setRestitution(1.f);
         blockBody->setDynamic(false);
         
